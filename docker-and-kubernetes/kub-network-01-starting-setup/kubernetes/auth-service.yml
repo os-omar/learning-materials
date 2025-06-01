@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service # can be accessed within the cluster using env `AUTH_SERVICE_SERVICE_HOST`
+spec:
+  selector:
+    app: auth
+  type: ClusterIP ## only accessible from within the cluster
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

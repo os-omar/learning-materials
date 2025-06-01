@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users
+  template:
+    metadata:
+      labels:
+        app: users
+    spec:
+      containers:
+        - name: users
+          image: omarsalim/kub-demo-users:latest
+          env:
+            - name: AUTH_ADDRESS
+              #     value: localhost # communication within the same Pod containers can use `localhost`
+              value: "auth-service.default" # the coreDNS "<service-name>.<namespace>" format
+# namespaces: is a concept which allow you to group deployments, services within a cluster.
+# `default` namespace is the default namespace created by kubernetes if you do not specify a namespace.

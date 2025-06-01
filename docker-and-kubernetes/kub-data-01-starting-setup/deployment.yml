@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: story-deployment
+spec:
+  replicas: 2 # Number of replicas to run aka number of pods
+  selector:
+    matchLabels:
+      app: story
+  template:
+    metadata:
+      labels:
+        app: story
+    spec:
+      containers:
+        - name: story
+          image: omarsalim/kub-data-demo:2
+          env:
+            - name: STORY_FOLDER
+              # value: "story" # this is the path inside the container where the volume will be mounted
+              valueFrom:
+                configMapKeyRef:
+                  name: data-store-env # this is the name of the config map defined in environment.yml
+                  key: folder # this is the key in the config map that contains the value
+          volumeMounts:
+            - mountPath: /app/story # this is the path inside the container where the volume will be mounted
+              name: story-volume # this is the name of the volume defined below
+      volumes:
+        - name: story-volume
+          # emptyDir: {} # this is located on pod level, so if a container destroyed the data will be kept alive, however if the pod is destroyed the data will be lost.
+          # hostPath: # this is a worker node level, so if the pod is destroyed the data will be kept alive, however if we have multiple worker nodes the data will be inconsistent.
+          #   path: /data # this is the path on the host machine where the volume will be mounted
+          #   type: DirectoryOrCreate # this will create the directory if it doesn't exist
+          persistentVolumeClaim: # this is a claim to a persistent volume, which means the data will be kept alive even if the pod is destroyed or the worker node is destroyed.
+            claimName: host-pvc # this is the name of the persistent volume claim defined in host-pvc.yml

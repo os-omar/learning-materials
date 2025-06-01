@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: second-app
+  ports:
+    - protocol: "TCP"
+      port: 80 # the outside port
+      targetPort: 8080 # the port inside the container
+    # - protocol: "TCP"
+    #   port: 443 # the outside port
+    #   targetPort: 443 # the port inside the container
+  type: LoadBalancer # for outside world access
+# kubectl apply -f service.yml
+
+# only for minikube
+# minikube service backend

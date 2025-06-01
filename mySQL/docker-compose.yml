@@ -1,0 +1,20 @@
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+      MYSQL_DATABASE: mydb
+      MYSQL_ROOT_PASSWORD: root_password # You should set a root password for security
+      MYSQL_WAIT_TIMEOUT: 3600
+      MYSQL_INTERACTIVE_TIMEOUT: 3600
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysqldata:/var/lib/mysql # Note: Renamed volume to 'pgdata' for consistency with your original file, consider renaming it to 'mysqldata' for clarity.
+    deploy:
+      resources:
+        limits:
+          memory: 4G #  increased memory limit to 4GB, adjust as needed
+volumes:
+  mysqldata:

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: second-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: second-app
+      tier: backend
+  template:
+    metadata:
+      labels:
+        # both the key `app` & value `second-app` labels are up to you
+        app: second-app
+        tier: backend
+    spec:
+      containers:
+        - name: second-node
+          image: omarsalim/kub-first-app:2
+# kubectl apply -f=deployment.yml
+# - to deploy the deployment yaml
+
+# kubectl delete -f=deployment.yml
+
+# kubectl delete -f=deployment.yml -f=service.yml
+# - to delete both the deployment and service

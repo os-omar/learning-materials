@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: data-store-env
+data:
+  folder: story # this is the path inside the container where the volume will be mounted
+  # key: value
+  # Add any other environment variables you want to set here
+# kubectl apply -f environment.yml
+# kubectl get configmap

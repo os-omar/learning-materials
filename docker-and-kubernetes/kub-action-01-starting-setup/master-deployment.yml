@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service # good practice to put the service before the deployment
+metadata:
+  name: backend
+  labels:
+    group: example
+spec:
+  selector:
+    app: second-app
+  ports:
+    - protocol: "TCP"
+      port: 80 # the outside port
+      targetPort: 8080 # the port inside the container
+    # - protocol: "TCP"
+    #   port: 443 # the outside port
+    #   targetPort: 443 # the port inside the container
+  type: LoadBalancer # for outside world access
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: second-app-deployment
+  labels:
+    group: example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: second-app
+      tier: backend
+    # matchExpressions:
+    #   - { key: app, operator: In, values: [second-app, first-app] } # we want to select the label of key `app` which Either has the value of `second-app` or `first-app`.
+    #   - { key: tier, operator: In, values: [backend] }
+  template:
+    metadata:
+      labels:
+        # both the key `app` & value `second-app` labels are up to you
+        app: second-app
+        tier: backend
+    spec:
+      containers:
+        - name: second-node
+          image: omarsalim/kub-first-app:2
+          imagePullPolicy: Always # to always pull the image
+          livenessProbe:
+            httpGet:
+              path: / # the path to check usually `/health` witch return statusCode `200`.
+              port: 8080
+            periodSeconds: 10 # how often to perform the probe
+            initialDelaySeconds: 5 # how long to wait before performing the first probe
+            timeoutSeconds: 2 # how long to wait for a response
+# kubectl apply -f=master-deployment.yml
+# - to deploy the deployment yaml
+#
+# kubectl delete -f=master-deployment.yml
+# - to delete both the deployment and service
+#
+# only for minikube
+# minikube service backend
+
+# you can delete by a selector
+# kubectl delete deployments,services -l group=example
+# - to delete all the deployments, & services with the label `group=example`

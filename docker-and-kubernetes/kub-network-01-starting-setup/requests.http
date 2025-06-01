@@ -1,0 +1,32 @@
+### user login
+POST http://localhost:62299/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "testers"
+}
+
+### New user signUp 
+POST http://localhost:62299/signup
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "testers"
+}
+
+### Create a new task
+POST http://localhost:62821/tasks
+Content-Type: application/json
+Authorization: Bearer abc
+
+{
+  "title": "dummy title",
+  "text": "dummy text"
+}
+
+### Get all tasks
+GET http://localhost:62821/tasks
+Content-Type: application/json
+Authorization: Bearer abc
